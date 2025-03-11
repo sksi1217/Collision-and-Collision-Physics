@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="Project\Core\Game.cpp" />
+    <ClCompile Include="Project\Core\GameObject.cpp" />
+    <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Project\Resources\ManagerGame.cpp" />
+    <ClCompile Include="Project\System\CollisionSystem.cpp" />
+    <ClCompile Include="Project\Components\Colliders\ColliderBoxComponent.cpp" />
+    <ClCompile Include="Project\Components\Colliders\ColliderCircleComponent.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Project\Core\Game.h" />
+    <ClInclude Include="Project\Core\GameObject.h" />
+    <ClInclude Include="Project\Resources\ManagerGame.h" />
+    <ClInclude Include="Project\Components\Colliders\ColliderBoxComponent.h" />
+    <ClInclude Include="Project\Components\Colliders\ColliderCircleComponent.h" />
+    <ClInclude Include="Project\Core\Component.h" />
+    <ClInclude Include="Project\Components\RenderComponent.h" />
+    <ClInclude Include="Project\Components\TransformComponent.h" />
+    <ClInclude Include="Project\Components\Colliders\ColliderComponent.h" />
+    <ClInclude Include="Project\Components\PhysicsComponent.h" />
+    <ClInclude Include="Project\System\CollisionSystem.h" />
+  </ItemGroup>
+</Project>
