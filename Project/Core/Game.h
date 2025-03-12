@@ -40,6 +40,8 @@ private:
 
     // Event Handling
     void HandleEvents();
+
+    void UpdateBoundaries(int screenWidth, int screenHeight);
 };
 
 #endif // GAME

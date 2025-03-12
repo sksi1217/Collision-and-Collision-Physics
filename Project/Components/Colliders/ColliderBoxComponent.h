@@ -16,10 +16,4 @@ public:
         ColliderBox.w = newSize.x;
         ColliderBox.h = newSize.y;
     }
-
-    bool CheckCollision(ColliderComponent* other) override;
-
-private:
-    static bool CheckBoxBox(ColliderBoxComponent* a, ColliderBoxComponent* b);
-    static bool CheckBoxCircle(ColliderBoxComponent* box, ColliderCircleComponent* circle);
 };

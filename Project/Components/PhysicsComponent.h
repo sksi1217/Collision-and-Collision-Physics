@@ -8,12 +8,12 @@
 #include "TransformComponent.h"
 #include "Colliders/ColliderComponent.h"
 
+// Components/PhysicsComponent.h
 class PhysicsComponent : public Component {
 public:
-    // Основные физические параметры
-    SDL_FPoint velocity{ 0.0f, 0.0f };   // Скорость (пиксели/сек)
-    SDL_FPoint acceleration{ 0.0f, 0.0f }; // Ускорение
-    float mass = 1.0f;                // Масса объекта
-    bool isStatic = false;            // Статический объект?
-    float friction = 0.1f;            // Коэффициент трения
+    SDL_FPoint Velocity{ 0.0f, 0.0f };
+    float Mass = 1;
+    float Restitution = 1; // Коэффициент упругости
+    float Friction = 0.5f;  // Коэффициент трения (новое поле)
+    bool IsStatic = false;  // Статический объект?
 };

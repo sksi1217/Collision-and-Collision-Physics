@@ -18,6 +18,8 @@ void GameObject::Update(float deltaTime) {
 	auto collider = GetComponent<ColliderComponent>();
 
 	if (!transform || !collider) return;
+	
+	transform->prevPosition = transform->Position;
 
 	// Полиморфное обновление позиции коллайдера
 	collider->UpdatePosition(transform->Position);

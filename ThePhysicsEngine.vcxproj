@@ -152,25 +152,33 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
-    <ClCompile Include="Project\Components\Colliders\ColliderBoxComponent.cpp" />
-    <ClCompile Include="Project\Components\Colliders\ColliderCircleComponent.cpp" />
     <ClCompile Include="Project\Core\Game.cpp" />
     <ClCompile Include="Project\Core\GameObject.cpp" />
+    <ClCompile Include="Project\Entities\Player.cpp" />
+    <ClCompile Include="Project\Entities\testObj.cpp" />
     <ClCompile Include="Project\Resources\ManagerGame.cpp" />
+    <ClCompile Include="Project\System\CollisionChecks.cpp" />
     <ClCompile Include="Project\System\CollisionSystem.cpp" />
+    <ClCompile Include="Project\Utils\MathUtils.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Project\Components\Colliders\ColliderBoxComponent.h" />
     <ClInclude Include="Project\Components\Colliders\ColliderCircleComponent.h" />
     <ClInclude Include="Project\Components\Colliders\ColliderComponent.h" />
+    <ClInclude Include="Project\Components\MovementComponent.h" />
     <ClInclude Include="Project\Components\PhysicsComponent.h" />
     <ClInclude Include="Project\Components\RenderComponent.h" />
     <ClInclude Include="Project\Components\TransformComponent.h" />
     <ClInclude Include="Project\Core\Component.h" />
+    <ClInclude Include="Project\Core\Entities.h" />
     <ClInclude Include="Project\Core\Game.h" />
     <ClInclude Include="Project\Core\GameObject.h" />
+    <ClInclude Include="Project\Entities\Player.h" />
+    <ClInclude Include="Project\Entities\testObj.h" />
     <ClInclude Include="Project\Resources\ManagerGame.h" />
+    <ClInclude Include="Project\System\CollisionChecks.h" />
     <ClInclude Include="Project\System\CollisionSystem.h" />
+    <ClInclude Include="Project\Utils\MathUtils.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

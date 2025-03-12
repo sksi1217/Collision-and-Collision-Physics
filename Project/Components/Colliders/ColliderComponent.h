@@ -19,8 +19,6 @@ public:
 
     virtual void UpdatePosition(const SDL_FPoint& position) = 0;
 
-    virtual bool CheckCollision(ColliderComponent* other) = 0;
-
 protected:
     SDL_FPoint offset{ 0.0f, 0.0f };
     SDL_FPoint currentPosition{ 0.0f, 0.0f };

@@ -12,6 +12,9 @@
 #include "../Components/RenderComponent.h"
 #include "../Components/Colliders/ColliderCircleComponent.h"
 #include "../Components/Colliders/ColliderBoxComponent.h"
+#include "../Components/PhysicsComponent.h"
+#include "../Entities/Player.h"
+#include "../Entities/testObj.h"
 
 
 CollisionSystem сollisionSystem;
@@ -80,44 +83,42 @@ void Game::LoadContent() {
 
 	// Create test obj
 
-	auto obj1 = std::make_shared<GameObject>();
-
-	auto transform = std::make_shared<TransformComponent>();
-	transform->Position = { 100, 100 };
-	obj1->AddComponent(transform);
-
-	auto renderer = std::make_shared<RenderComponent>();
-	obj1->AddComponent(renderer);
-
-	auto collider = std::make_shared<ColliderCircleComponent>();
-	collider->CircleRadius = 40.0f;
-	obj1->AddComponent(collider);
-
-	ManagerGame::objects.push_back(obj1);
+	std::shared_ptr<GameObject> player = std::make_shared<Player>(SDL_FPoint{ 100, 100 });
+	ManagerGame::objects.push_back(player);
 
 	// ---
 
+	std::shared_ptr<GameObject> obj = std::make_shared<testObj>(SDL_FPoint{ 200, 100 });
+	ManagerGame::objects.push_back(obj);
+
+	/*
 	auto obj2 = std::make_shared<GameObject>();
 
-	auto transform1 = std::make_shared<TransformComponent>();
-	transform1->Position = { 100, 100 };
-	obj2->AddComponent(transform1);
+	auto transform = std::make_shared<TransformComponent>();
+	transform->Position = { 200, 100 };
+	obj2->AddComponent(transform);
 
-	auto renderer1 = std::make_shared<RenderComponent>();
-	obj2->AddComponent(renderer1);
+	auto renderer = std::make_shared<RenderComponent>();
+	obj2->AddComponent(renderer);
 
-	auto collider1 = std::make_shared<ColliderCircleComponent>();
-	collider1->CircleRadius = 30.0f;
-	obj2->AddComponent(collider1);
+	auto physics = std::make_shared<PhysicsComponent>();
+	obj2->AddComponent(physics);
+
+	auto collider = std::make_shared<ColliderCircleComponent>();
+	// collider->SetSize(SDL_FPoint{ 64, 64 });
+	collider->CircleRadius = 60.0f;
+	obj2->AddComponent(collider);
 
 	ManagerGame::objects.push_back(obj2);
-
-	followObject = obj1;
+	*/
+	followObject = player;
 }
 
 // Logic Update
 void Game::Update(float deltaTime)
 {
+	
+
 	for (size_t i = 0; i < ManagerGame::objects.size(); ) {
 		auto& obj = ManagerGame::objects[i];
 		// Обновляем объект, если он активен
@@ -125,7 +126,11 @@ void Game::Update(float deltaTime)
 		++i; // Переходим к следующему объекту
 	}
 
-	сollisionSystem.UpdateCollidion();
+	UpdateBoundaries(800, 600);
+
+	сollisionSystem.UpdateCollisions();
+	
+
 }
 
 // Frame rendering
@@ -146,8 +151,6 @@ void Game::UnloadContent() {
 	std::cout << "Unloading content..." << std::endl;
 }
 
-// Game.cpp
-// В Game.cpp
 void Game::HandleEvents() {
 	SDL_Event event;
 	while (SDL_PollEvent(&event)) {
@@ -155,25 +158,49 @@ void Game::HandleEvents() {
 		case SDL_QUIT:
 			isRunning = false;
 			break;
-
+			/*
 		case SDL_MOUSEMOTION: {
 			if (followObject) {
 				int x, y;
 				SDL_GetMouseState(&x, &y);
 
 				auto transform = followObject->GetComponent<TransformComponent>();
-				if (transform) {
-					transform->Position.x += (x - transform->Position.x);
-					transform->Position.y += (y - transform->Position.y);
+				auto physics = followObject->GetComponent<PhysicsComponent>();
 
-					// Обновляем коллайдер
-					if (auto collider = followObject->GetComponent<ColliderComponent>()) {
-						collider->UpdatePosition(transform->Position);
+				if (transform && physics) {
+					// Вычисляем вектор направления к курсору
+					float dx = x - transform->Position.x;
+					float dy = y - transform->Position.y;
+
+					// Нормализуем вектор направления
+					float distance = std::sqrt(dx * dx + dy * dy);
+					if (distance > 0) {
+						dx /= distance;
+						dy /= distance;
 					}
+
+					// Задаем максимальную скорость движения к курсору
+					const float maxSpeed = 300.0f;
+
+					// Устанавливаем скорость объекта в направлении курсора
+					physics->Velocity.x = dx * maxSpeed;
+					physics->Velocity.y = dy * maxSpeed;
+
+					// Если объект уже близко к курсору, останавливаем его
+					if (distance < 5.0f) { // Пороговое значение для остановки
+						physics->Velocity.x = 0.0f;
+						physics->Velocity.y = 0.0f;
+					}
+				}
+
+				// Обновляем коллайдер
+				if (auto collider = followObject->GetComponent<ColliderComponent>()) {
+					collider->UpdatePosition(transform->Position);
 				}
 			}
 			break;
 		}
+		*/
 		}
 	}
 }
@@ -207,4 +234,36 @@ void Game::Run() {
 	}
 
 	UnloadContent();
+}
+
+void Game::UpdateBoundaries(int screenWidth, int screenHeight) {
+	auto& objects = ManagerGame::objects;
+
+	for (auto& obj : objects) {
+		auto transform = obj->GetComponent<TransformComponent>();
+		auto physics = obj->GetComponent<PhysicsComponent>();
+		auto collider = obj->GetComponent<ColliderComponent>();
+
+		auto colliderA = std::dynamic_pointer_cast<ColliderCircleComponent>(collider);
+
+		if (!transform || !physics || !colliderA) continue;
+
+		// Проверяем границы экрана
+		if (transform->Position.x - colliderA->CircleRadius < 0) { // Левая граница
+			transform->Position.x = colliderA->CircleRadius;
+			physics->Velocity.x = std::abs(physics->Velocity.x) * physics->Restitution; // Отскок
+		}
+		if (transform->Position.x + colliderA->CircleRadius > screenWidth) { // Правая граница
+			transform->Position.x = screenWidth - colliderA->CircleRadius;
+			physics->Velocity.x = -std::abs(physics->Velocity.x) * physics->Restitution; // Отскок
+		}
+		if (transform->Position.y - colliderA->CircleRadius < 0) { // Верхняя граница
+			transform->Position.y = colliderA->CircleRadius;
+			physics->Velocity.y = std::abs(physics->Velocity.y) * physics->Restitution; // Отскок
+		}
+		if (transform->Position.y + colliderA->CircleRadius > screenHeight) { // Нижняя граница
+			transform->Position.y = screenHeight - colliderA->CircleRadius;
+			physics->Velocity.y = -std::abs(physics->Velocity.y) * physics->Restitution; // Отскок
+		}
+	}
 }
