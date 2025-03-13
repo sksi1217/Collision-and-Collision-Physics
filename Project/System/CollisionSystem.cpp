@@ -1,4 +1,4 @@
-﻿#include <algorithm>
+#include <algorithm>
 #include <iostream>
 
 // System
@@ -139,6 +139,7 @@ void CollisionSystem::ResolveCollision(GameObject* a, GameObject* b) {
 
 	// Обновляем позиции объектов, если они пересекаются
 	float overlap = distance - (colliderA->CircleRadius + colliderB->CircleRadius);
+
 	if (overlap < 0) {
 		// Коррекция позиции
 		PositionalCorrection(a, b, -overlap, normal);
@@ -146,8 +147,7 @@ void CollisionSystem::ResolveCollision(GameObject* a, GameObject* b) {
 }
 
 void CollisionSystem::PositionalCorrection(GameObject* a, GameObject* b, float penetrationDepth, SDL_FPoint normal) {
-	const float percent = 1; // Процент коррекции (обычно 20% - 80%)
-	const float slop = 0.01f;   // Пороговое значение для игнорирования небольших проникновений
+	const float slop = 0.1f;   // Пороговое значение для игнорирования небольших проникновений
 
 	auto physicsA = a->GetComponent<PhysicsComponent>();
 	auto physicsB = b->GetComponent<PhysicsComponent>();
@@ -160,7 +160,7 @@ void CollisionSystem::PositionalCorrection(GameObject* a, GameObject* b, float p
 
 	// Вычисляем коррекцию
 	float correctionMagnitude = std::max(penetrationDepth - slop, 0.0f) /
-		(invMassA + invMassB) * percent;
+		(invMassA + invMassB);
 
 	SDL_FPoint correction = { correctionMagnitude * normal.x, correctionMagnitude * normal.y };
 
