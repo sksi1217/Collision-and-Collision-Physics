@@ -24,12 +24,8 @@ protected:
         AddComponent(collider);
     }
 private:
-    // float ElapsedTime = 0;
-    void ApplyFriction(std::shared_ptr<PhysicsComponent> physics, float deltaTime, float velocityThreshold);
-    void UpdatePosition(PhysicsComponent* physics, float deltaTime);
+    const float maxSpeed = 100.0f; // Максимальная скорость
 
-    void LimitSpeed(std::shared_ptr<PhysicsComponent> physics, float maxSpeed);
+    void LimitSpeed(std::shared_ptr<PhysicsComponent> physics);
     void HandleMovement(std::shared_ptr<PhysicsComponent> physics, float deltaTime);
-
-    void ApplyFriction(std::shared_ptr<PhysicsComponent> physics, float deltaTime);
 };

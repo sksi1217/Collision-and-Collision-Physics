@@ -32,21 +32,19 @@ void testObj::Update(float deltaTime) {
     auto transform = GetComponent<TransformComponent>();
     auto collider = GetComponent<ColliderComponent>();
 
-    const float maxSpeed = 200.0f; // Максимальная скорость
-
     if (!physics || !transform) return;
 
     // Обработка входных данных
     HandleMovement(physics, deltaTime);
 
     // Ограничение максимальной скорости
-    LimitSpeed(physics, maxSpeed);
+    LimitSpeed(physics);
 
     // Обновляем позицию
     transform->Position.x += physics->Velocity.x * deltaTime;
     transform->Position.y += physics->Velocity.y * deltaTime;
 
-    // std::cout << physics->Velocity.x << "/" << physics->Velocity.y << std::endl;
+    std::cout << physics->Velocity.x << "/" << physics->Velocity.y << std::endl;
 
     // Обновляем коллайдер
     if (collider) collider->UpdatePosition(transform->Position);
@@ -78,7 +76,7 @@ void testObj::HandleMovement(std::shared_ptr<PhysicsComponent> physics, float de
 }
 
 // Метод для ограничения максимальной скорости
-void testObj::LimitSpeed(std::shared_ptr<PhysicsComponent> physics, float maxSpeed) {
+void testObj::LimitSpeed(std::shared_ptr<PhysicsComponent> physics) {
     float currentSpeed = std::sqrt(physics->Velocity.x * physics->Velocity.x + physics->Velocity.y * physics->Velocity.y);
 
     if (currentSpeed > 0.0f) {
