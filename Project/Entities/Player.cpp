@@ -19,8 +19,8 @@ Player::Player(const SDL_FPoint& startPosition) {
 
     if (!transform || !physics || !collider) return;
 
-    physics->Mass = 999;
-    physics->Friction = 0.1;     // Коэффициент трения
+    physics->Mass = 10;
+    physics->Friction = 0.5;     // Коэффициент трения
     physics->Restitution = 1;  // Коэффициент упругости
     collider->CircleRadius = 40.0f; // Радиус коллизии
 
@@ -42,7 +42,7 @@ void Player::Update(float deltaTime) {
     SDL_FPoint velocity = { 0.0f, 0.0f };
 
     // Обработка движения
-    HandleMovement(keyboardState, velocity, deltaTime);
+    // HandleMovement(keyboardState, velocity, deltaTime);
 
     // Применяем трение
     // ApplyFriction(physics.get(), deltaTime);
@@ -50,7 +50,6 @@ void Player::Update(float deltaTime) {
     // Обновляем позицию объекта
     UpdatePosition(physics.get(), deltaTime);
 
-    std::cout << physics->Velocity.x << "/" << physics->Velocity.y << std::endl;
 
     // Обновление коллайдера
     if (collider) collider->UpdatePosition(transform->Position);
@@ -83,7 +82,6 @@ void Player::UpdatePosition(PhysicsComponent* physics, float deltaTime) {
     physics->Velocity.x *= (1 - physics->Friction * deltaTime);
     physics->Velocity.y *= (1 - physics->Friction * deltaTime);
 
-    std::cout << physics->Velocity.x << "/" << physics->Velocity.y << std::endl;
 
 
     // Порог для обнуления скорости (очень маленькое значение)

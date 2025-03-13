@@ -25,7 +25,11 @@ protected:
     }
 private:
     // float ElapsedTime = 0;
-    void ApplyFriction(PhysicsComponent* physics, float deltaTime);
+    void ApplyFriction(std::shared_ptr<PhysicsComponent> physics, float deltaTime, float velocityThreshold);
     void UpdatePosition(PhysicsComponent* physics, float deltaTime);
 
+    void LimitSpeed(std::shared_ptr<PhysicsComponent> physics, float maxSpeed);
+    void HandleMovement(std::shared_ptr<PhysicsComponent> physics, float deltaTime);
+
+    void ApplyFriction(std::shared_ptr<PhysicsComponent> physics, float deltaTime);
 };
